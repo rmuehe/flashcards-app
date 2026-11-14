@@ -8,6 +8,101 @@
   <script src="app.js" defer></script>
 </head>
 <body>
-  <h1>Flashcards</h1>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="app-header" data-page-region>
+    <h1>Flashcards</h1>
+    <button type="button" class="btn btn-primary" id="new-deck-btn">+ New Deck</button>
+  </header>
+
+  <div class="layout" data-page-region>
+    <nav class="sidebar" aria-labelledby="decks-heading">
+      <h2 id="decks-heading" class="sidebar-title">Your Decks</h2>
+      <ul id="deck-list" class="deck-list"></ul>
+      <p id="deck-list-empty" class="sidebar-empty" hidden>No decks yet.</p>
+    </nav>
+
+    <main id="main" class="main" tabindex="-1">
+      <!-- Shown when no deck is selected -->
+      <section id="no-deck" class="empty-state">
+        <span class="empty-icon" aria-hidden="true">🗂️</span>
+        <p id="no-deck-text">No decks yet. Click “New Deck” to create your first one.</p>
+      </section>
+
+      <!-- Shown when a deck is active -->
+      <section id="deck-view" aria-labelledby="deck-title" hidden>
+        <div class="deck-header">
+          <h2 id="deck-title"></h2>
+          <div class="deck-actions">
+            <button type="button" class="btn btn-small" id="rename-deck-btn">Rename deck</button>
+            <button type="button" class="btn btn-small btn-danger" id="delete-deck-btn">Delete deck</button>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <label for="search" class="visually-hidden">Search cards in this deck</label>
+          <input type="search" id="search" placeholder="Search cards…" autocomplete="off">
+          <button type="button" class="btn" id="shuffle-btn">Shuffle</button>
+          <button type="button" class="btn btn-primary" id="new-card-btn">+ New Card</button>
+        </div>
+        <p id="match-count" class="match-count" aria-live="polite"></p>
+
+        <div class="study">
+          <div id="card-scene" class="card-scene">
+            <div id="card" class="card" aria-live="polite">
+              <div id="card-front" class="card-face card-front">
+                <span class="face-label">Question</span>
+                <p id="card-front-text" class="card-text"></p>
+              </div>
+              <div id="card-back" class="card-face card-back" aria-hidden="true">
+                <span class="face-label">Answer</span>
+                <p id="card-back-text" class="card-text"></p>
+              </div>
+            </div>
+          </div>
+
+          <div id="card-empty" class="empty-state" hidden></div>
+
+          <div class="controls">
+            <button type="button" class="btn" id="prev-btn"><span aria-hidden="true">← </span>Previous</button>
+            <button type="button" class="btn btn-primary" id="flip-btn" aria-pressed="false">Flip</button>
+            <button type="button" class="btn" id="next-btn">Next<span aria-hidden="true"> →</span></button>
+          </div>
+          <p id="position" class="position" aria-live="polite"></p>
+        </div>
+
+        <section class="card-list-section" aria-labelledby="cards-heading">
+          <h3 id="cards-heading">Cards in this deck</h3>
+          <ul id="card-list" class="card-list"></ul>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <footer class="app-footer" data-page-region>
+    <p>
+      Shortcuts: <kbd>Space</kbd> flip · <kbd>←</kbd> <kbd>→</kbd> previous/next ·
+      <kbd>Enter</kbd> save in dialogs · <kbd>Esc</kbd> close dialogs
+    </p>
+  </footer>
+
+  <!-- Status messages for screen readers (kept outside the regions made inert by the modal) -->
+  <div id="status" class="visually-hidden" role="status" aria-live="polite"></div>
+
+  <!-- Reusable modal dialog -->
+  <div id="modal-backdrop" class="modal-backdrop" hidden>
+    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 id="modal-title"></h2>
+      <form id="modal-form" novalidate>
+        <div id="modal-fields"></div>
+        <p id="modal-error" class="error" role="alert"></p>
+        <p class="hint">Enter saves · Shift+Enter adds a new line · Esc cancels</p>
+        <div class="modal-actions">
+          <button type="button" class="btn" id="modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="modal-submit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
