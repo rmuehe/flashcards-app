@@ -272,21 +272,25 @@ function renderStudyCard(cards = studyCards()) {
   view.index = Math.min(Math.max(view.index, 0), cards.length - 1);
   const card = cards[view.index];
 
-  // A different card is now showing: snap it front-up WITHOUT animating,
-  // otherwise the next card's answer would flash during the flip back.
   if (card.id !== view.shownCardId) {
-    view.flipped = false;
-    els.card.classList.add('no-transition');
-    els.card.classList.remove('is-flipped');
-    void els.card.offsetWidth; // force reflow so the class change applies instantly
-    els.card.classList.remove('no-transition');
-    view.shownCardId = card.id;
+    showFrontInstantly();
+  view.shownCardId = card.id;
   }
 
   els.frontText.textContent = card.front;
   els.backText.textContent = card.back;
   applyFlip();
   els.position.textContent = `Card ${view.index + 1} of ${cards.length}`;
+}
+
+// Snap the card front-up WITHOUT the flip animation, so the next
+// card's answer doesn't flash on screen while it rotates back.
+function showFrontInstantly() {
+  view.flipped = false;
+  els.card.classList.add('no-transition');
+  els.card.classList.remove('is-flipped');
+  void els.card.offsetWidth; // force reflow so the change applies immediately
+  els.card.classList.remove('no-transition');
 }
 
 function applyFlip() {
